@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ document.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">C5</span>
+        <div>
+          <strong>Code 5 Developers Knowledge Base</strong>
+          <span>{{ document.title }}</span>
+        </div>
+      </div>
+      <nav class="topnav" aria-label="Primary">
+        <a href="/">Ask</a>
+        <a href="/library">Library</a>
+        <a href="{{ document.file_url }}">Open file</a>
+      </nav>
+    </header>
+
+    <main class="reader-shell">
+      <div class="reader-header">
+        <div>
+          <p class="eyebrow">{{ document.type }} document</p>
+          <h1>{{ document.title }}</h1>
+          <p>{{ document.filename }} · {{ document.size_kb }} KB</p>
+        </div>
+      </div>
+      {% if document.type == "pdf" %}
+        <iframe class="pdf-reader" title="{{ document.title }}" src="{{ document.file_url }}"></iframe>
+      {% else %}
+        <article class="text-reader">
+          <pre>{{ content }}</pre>
+        </article>
+      {% endif %}
+    </main>
+  </body>
+</html>

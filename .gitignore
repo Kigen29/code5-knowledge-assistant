@@ -1,0 +1,12 @@
+.chroma/
+.cache/
+.agents/
+.codex/
+.pytest_cache/
+__pycache__/
+*.pyc
+.env
+.venv/
+.venv311/
+venv/
+eval/results.json

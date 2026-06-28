@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: code5-knowledge-assistant
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt && python scripts/generate_policy_pdfs.py && python -m rag_app.ingest"
+    startCommand: "gunicorn 'rag_app.app:app' --bind 0.0.0.0:$PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_MODEL
+        value: llama-3.1-8b-instant
+      - key: TOP_K
+        value: "5"
+      - key: MAX_ANSWER_TOKENS
+        value: "450"
+      - key: CHROMA_DIR
+        value: .chroma

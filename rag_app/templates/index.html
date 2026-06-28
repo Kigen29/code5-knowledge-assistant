@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Code 5 Developers Knowledge Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">C5</span>
+        <div>
+          <strong>Code 5 Developers Knowledge Base</strong>
+          <span>Software, systems, maintenance, and tech operations</span>
+        </div>
+      </div>
+      <nav class="topnav" aria-label="Primary">
+        <a href="https://code5developers.com/">Website</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Application navigation">
+        <section class="sidebar-section">
+          <h2>Workspace</h2>
+          <a class="nav-item active" href="/">RAG Assistant</a>
+          <a class="nav-item" href="/library">Documents</a>
+        </section>
+      </aside>
+
+      <section class="content">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">Code 5 Developers assistant</p>
+            <h1>Ask about company delivery, systems, maintenance, and tech operations</h1>
+          </div>
+          <div class="status-row" aria-label="System status">
+            <div>
+              <span>Documents</span>
+              <strong>{{ documents|length }}</strong>
+            </div>
+            <div>
+              <span>Chunks</span>
+              <strong>{{ stats.chunks }}</strong>
+            </div>
+            <div>
+              <span>Status</span>
+              <strong id="healthLabel">checking</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="workbench">
+          <section class="primary-panel" aria-label="Question and answer">
+            <form id="chatForm" class="question-form">
+              <label for="question">Question</label>
+              <textarea id="question" name="question" rows="5" placeholder="Example: What is the standard deployment approval process?"></textarea>
+              <div class="form-actions">
+                <span>Answers are limited to indexed Code 5 Developers documents.</span>
+                <button type="submit">Ask knowledge base</button>
+              </div>
+            </form>
+
+            <article class="answer-box">
+              <div class="section-title">
+                <h2>Answer</h2>
+                <span id="latency">Ready</span>
+              </div>
+              <p id="answer">Your answer will appear here. Citations are listed separately.</p>
+            </article>
+
+            <section class="faq-panel" aria-label="Frequently asked questions">
+              <div class="section-title">
+                <h2>FAQs</h2>
+              </div>
+              <div class="faq-grid">
+                <button class="prompt" data-question="What is Code 5 Developers' standard software delivery workflow?">Delivery workflow</button>
+                <button class="prompt" data-question="How quickly are critical production incidents escalated?">Incident escalation</button>
+                <button class="prompt" data-question="What should be included in a maintenance handover?">Maintenance handover</button>
+                <button class="prompt" data-question="What is the policy for client source code access?">Source code access</button>
+              </div>
+            </section>
+          </section>
+
+          <aside class="evidence-panel" aria-label="Retrieved evidence">
+            <section>
+              <div class="section-title">
+                <h2>Citations</h2>
+              </div>
+              <div id="citations" class="evidence-list muted">No citations yet.</div>
+            </section>
+
+            <section>
+              <div class="section-title">
+                <h2>Retrieved snippets</h2>
+              </div>
+              <div id="snippets" class="evidence-list muted">No snippets yet.</div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

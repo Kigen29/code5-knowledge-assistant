@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Code 5 Developers Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">C5</span>
+        <div>
+          <strong>Code 5 Developers Knowledge Base</strong>
+          <span>Software delivery and operations library</span>
+        </div>
+      </div>
+      <nav class="topnav" aria-label="Primary">
+        <a href="https://code5developers.com/">Website</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Application navigation">
+        <section class="sidebar-section">
+          <h2>Workspace</h2>
+          <a class="nav-item" href="/">RAG Assistant</a>
+          <a class="nav-item active" href="/library">Documents</a>
+        </section>
+      </aside>
+
+      <section class="content">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">Document library</p>
+            <h1>Code 5 Developers operating documents</h1>
+          </div>
+        </div>
+        <section class="library-grid paginated-list" data-page-size="8">
+          {% for document in documents %}
+            <article class="document-card paginated-item">
+              <div>
+                <span class="doc-type">{{ document.type }}</span>
+                <h2>{{ document.title }}</h2>
+                <p>{{ document.filename }} · {{ document.size_kb }} KB</p>
+              </div>
+              <div class="document-actions">
+                <a href="{{ document.view_url }}">Read</a>
+                <a href="{{ document.file_url }}">Open file</a>
+              </div>
+            </article>
+          {% endfor %}
+        </section>
+        <div class="pagination library-pagination">
+          <button type="button" data-page-action="prev">Previous</button>
+          <span data-page-label>Page 1 of 1</span>
+          <button type="button" data-page-action="next">Next</button>
+        </div>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
