@@ -7,6 +7,10 @@ services:
     startCommand: "gunicorn 'rag_app.app:app' --bind 0.0.0.0:$PORT"
     healthCheckPath: /health
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: GROQ_API_KEY
+        sync: false
       - key: LLM_MODEL
         value: llama-3.1-8b-instant
       - key: TOP_K
