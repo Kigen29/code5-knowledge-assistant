@@ -49,8 +49,8 @@ The latest local evaluation run produced:
 - Question count: 30
 - Groundedness auto-check: 100%
 - Citation accuracy auto-check: 100%
-- Latency p50: 39 ms
-- Latency p95: 164 ms
+- Latency p50: 20 ms
+- Latency p95: 21 ms
 
 Before final submission, rerun the evaluation after any document changes and manually review the generated answers against retrieved snippets.
 
