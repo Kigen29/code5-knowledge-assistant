@@ -6,7 +6,7 @@ https://github.com/Kigen29/code5-knowledge-assistant
 
 Recorded demo video:
 
-Pending demo recording.
+https://drive.google.com/file/d/1gyMJzN5HzWY-jUGi0jA6MPvx60TatzzI/view?usp=sharing
 
 Deployed app:
 
