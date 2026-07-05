@@ -529,6 +529,7 @@ button {
   display: grid;
   gap: 8px;
   margin-top: 12px;
+  min-width: 0;
 }
 
 .evidence-item {
@@ -540,6 +541,9 @@ button {
   color: #344252;
   line-height: 1.45;
   font-size: 0.92rem;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .evidence-item strong,
@@ -550,11 +554,13 @@ button {
 
 .evidence-item strong {
   margin-top: 8px;
+  overflow-wrap: anywhere;
 }
 
 .evidence-item p {
   margin: 6px 0 0;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }
 
 .evidence-item small {
@@ -572,17 +578,28 @@ button {
   font-size: 0.76rem;
   font-weight: 800;
   text-transform: uppercase;
+  min-width: 0;
+}
+
+.evidence-kicker span,
+.evidence-kicker code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.evidence-kicker span {
+  flex: 1 1 auto;
 }
 
 .evidence-kicker code {
-  max-width: 58%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  flex: 0 1 62%;
   color: #526173;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.72rem;
   text-transform: none;
-  white-space: nowrap;
+  text-align: right;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .muted {
@@ -640,5 +657,16 @@ button {
 
   .status-row {
     grid-template-columns: 1fr;
+  }
+
+  .evidence-kicker {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .evidence-kicker code {
+    flex-basis: auto;
+    max-width: 100%;
+    text-align: left;
   }
 }
