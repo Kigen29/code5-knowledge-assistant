@@ -37,7 +37,7 @@ class RagPipeline:
         contexts = self.store.search(clean_question, settings.top_k)
         if not contexts or not has_overlap(clean_question, contexts):
             answer = REFUSAL_MESSAGE
-            contexts = contexts[:2]
+            contexts = []
         else:
             answer = generate_answer(clean_question, contexts)
         latency_ms = int((time.perf_counter() - started) * 1000)
@@ -64,9 +64,16 @@ def build_citations(contexts: list[dict]) -> list[dict]:
                 "source_path": item.get("source_path", ""),
                 "heading": item.get("heading", ""),
                 "score": item.get("score"),
+                "relevance": relevance_label(item.get("score")),
             }
         )
     return citations
+
+
+def relevance_label(score: float | None) -> str:
+    if score is None:
+        return "retrieved"
+    return f"{max(0, min(100, round(score * 100)))}% match"
 
 
 def clean_answer_text(answer: str) -> str:
@@ -83,6 +90,10 @@ def build_snippets(contexts: list[dict]) -> list[dict]:
             {
                 "title": item["title"],
                 "chunk_id": item["chunk_id"],
+                "heading": item.get("heading", ""),
+                "source_path": item.get("source_path", ""),
+                "score": item.get("score"),
+                "relevance": relevance_label(item.get("score")),
                 "snippet": text[:420] + ("..." if len(text) > 420 else ""),
             }
         )

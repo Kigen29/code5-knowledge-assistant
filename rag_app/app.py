@@ -26,7 +26,24 @@ def create_app() -> Flask:
 
     @app.get("/library")
     def library():
-        return render_template("library.html", documents=list_library_documents())
+        documents = list_library_documents()
+        page = positive_int(request.args.get("page"), default=1)
+        per_page = 8
+        total_pages = max(1, (len(documents) + per_page - 1) // per_page)
+        page = min(page, total_pages)
+        start = (page - 1) * per_page
+        end = start + per_page
+        return render_template(
+            "library.html",
+            documents=documents[start:end],
+            pagination={
+                "page": page,
+                "total_pages": total_pages,
+                "total_items": len(documents),
+                "prev_page": page - 1 if page > 1 else None,
+                "next_page": page + 1 if page < total_pages else None,
+            },
+        )
 
     @app.get("/library/<path:filename>")
     def library_document(filename: str):
@@ -97,6 +114,14 @@ def find_library_document(filename: str) -> dict | None:
         if document["filename"] == safe_name:
             return document
     return None
+
+
+def positive_int(value: str | None, default: int = 1) -> int:
+    try:
+        parsed = int(value or default)
+    except (TypeError, ValueError):
+        return default
+    return max(1, parsed)
 
 
 def title_for_path(path: Path) -> str:

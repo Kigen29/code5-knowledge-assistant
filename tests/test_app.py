@@ -61,3 +61,5 @@ def test_chat_refuses_out_of_corpus(monkeypatch):
 
     assert response.status_code == 200
     assert data["answer"] == "I can only answer from Code 5 Developers documents."
+    assert data["citations"] == []
+    assert data["snippets"] == []

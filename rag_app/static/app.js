@@ -19,23 +19,66 @@ async function askPolicy(text) {
   const data = await response.json();
   answer.textContent = data.answer;
   latency.textContent = `${data.latency_ms} ms`;
-  renderList(citations, data.citations, (item) => `${item.title} (${item.heading || item.chunk_id})`);
-  renderList(snippets, data.snippets, (item) => `${item.title}: ${item.snippet}`);
+  renderCitations(data.citations || []);
+  renderSnippets(data.snippets || []);
 }
 
-function renderList(node, rows, mapper) {
-  node.classList.toggle("muted", !rows.length);
+function setEmpty(node, message) {
+  node.classList.add("muted");
+  node.textContent = message;
+}
+
+function renderCitations(rows) {
+  citations.classList.toggle("muted", !rows.length);
   if (!rows.length) {
-    node.textContent = "None returned.";
+    setEmpty(citations, "No citations returned for this answer.");
     return;
   }
-  node.innerHTML = "";
+  citations.innerHTML = "";
   rows.forEach((row) => {
     const div = document.createElement("div");
-    div.className = "evidence-item";
-    div.textContent = mapper(row);
-    node.appendChild(div);
+    div.className = "evidence-item citation-card";
+    div.innerHTML = `
+      <div class="evidence-kicker">
+        <span>${escapeHtml(row.relevance || "retrieved")}</span>
+        <code>${escapeHtml(row.chunk_id || "")}</code>
+      </div>
+      <strong>${escapeHtml(row.title || "Untitled source")}</strong>
+      <p>${escapeHtml(row.heading || "General")}</p>
+      <small>${escapeHtml(row.source_path || "")}</small>
+    `;
+    citations.appendChild(div);
   });
+}
+
+function renderSnippets(rows) {
+  snippets.classList.toggle("muted", !rows.length);
+  if (!rows.length) {
+    setEmpty(snippets, "No retrieved snippets to show.");
+    return;
+  }
+  snippets.innerHTML = "";
+  rows.forEach((row) => {
+    const div = document.createElement("div");
+    div.className = "evidence-item snippet-card";
+    div.innerHTML = `
+      <div class="evidence-kicker">
+        <span>${escapeHtml(row.title || "Untitled source")}</span>
+        <code>${escapeHtml(row.chunk_id || "")}</code>
+      </div>
+      <p>${escapeHtml(row.snippet || "")}</p>
+    `;
+    snippets.appendChild(div);
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 if (form) {
@@ -78,25 +121,44 @@ document.querySelectorAll(".paginated-list").forEach((list) => {
   const label = controls.querySelector("[data-page-label]");
   const prev = controls.querySelector("[data-page-action='prev']");
   const next = controls.querySelector("[data-page-action='next']");
+  const pageButtons = document.createElement("div");
+  pageButtons.className = "page-numbers";
+  label.insertAdjacentElement("afterend", pageButtons);
 
   function renderPage() {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     items.forEach((item, index) => {
-      item.hidden = index < start || index >= end;
+      item.classList.toggle("is-hidden", index < start || index >= end);
     });
     label.textContent = `Page ${page} of ${totalPages}`;
     prev.disabled = page === 1;
     next.disabled = page === totalPages;
+    pageButtons.innerHTML = "";
+    for (let index = 1; index <= totalPages; index += 1) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = index === page ? "page-number active" : "page-number";
+      button.textContent = index;
+      button.setAttribute("aria-label", `Go to page ${index}`);
+      button.addEventListener("click", () => {
+        page = index;
+        renderPage();
+        list.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      pageButtons.appendChild(button);
+    }
   }
 
   prev.addEventListener("click", () => {
     page = Math.max(1, page - 1);
     renderPage();
+    list.scrollIntoView({ behavior: "smooth", block: "start" });
   });
   next.addEventListener("click", () => {
     page = Math.min(totalPages, page + 1);
     renderPage();
+    list.scrollIntoView({ behavior: "smooth", block: "start" });
   });
   renderPage();
 });
