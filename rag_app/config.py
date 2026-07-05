@@ -21,6 +21,7 @@ class Settings:
     llm_model: str = os.getenv("LLM_MODEL", "llama-3.1-8b-instant")
     top_k: int = int(os.getenv("TOP_K", "5"))
     max_answer_tokens: int = int(os.getenv("MAX_ANSWER_TOKENS", "450"))
+    max_context_chars: int = int(os.getenv("MAX_CONTEXT_CHARS", "1200"))
     request_timeout: int = int(os.getenv("REQUEST_TIMEOUT", "45"))
 
 

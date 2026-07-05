@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+from functools import lru_cache
 from pathlib import Path
 
 from flask import Flask, abort, jsonify, render_template, request, send_from_directory
@@ -89,7 +91,8 @@ def safe_stats(store: VectorStore) -> dict:
         return {"collection": settings.collection_name, "chunks": 0, "path": str(settings.chroma_dir), "error": str(exc)}
 
 
-def list_library_documents() -> list[dict]:
+@lru_cache(maxsize=1)
+def list_library_documents() -> tuple[dict, ...]:
     documents = []
     for path in sorted(settings.policy_dir.glob("*")):
         if not path.is_file() or path.suffix.lower() not in SUPPORTED_SUFFIXES:
@@ -105,7 +108,7 @@ def list_library_documents() -> list[dict]:
                 "file_url": f"/documents/{path.name}",
             }
         )
-    return documents
+    return tuple(documents)
 
 
 def find_library_document(filename: str) -> dict | None:
@@ -125,11 +128,24 @@ def positive_int(value: str | None, default: int = 1) -> int:
 
 
 def title_for_path(path: Path) -> str:
+    if path.suffix.lower() == ".pdf":
+        return title_from_filename(path)
     try:
         text = parse_file(path)
         return extract_title(text, path)
     except Exception:
-        return path.stem.replace("-", " ").title()
+        return title_from_filename(path)
+
+
+def title_from_filename(path: Path) -> str:
+    title = re.sub(r"^\d+[-_]+", "", path.stem)
+    title = title.replace("code5", "code 5").replace("-", " ").replace("_", " ")
+    words = []
+    acronyms = {"ai", "api", "qa", "ui", "ux"}
+    for word in title.split():
+        lower = word.lower()
+        words.append(lower.upper() if lower in acronyms else lower.capitalize())
+    return " ".join(words)
 
 
 app = create_app()

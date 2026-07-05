@@ -30,7 +30,7 @@ def generate_answer(question: str, contexts: Sequence[dict]) -> str:
 
 def groq_answer(question: str, contexts: Sequence[dict]) -> str:
     context_text = "\n\n".join(
-        f"[{item['title']} | {item['chunk_id']}]\n{item['text']}" for item in contexts
+        f"[{item['title']} | {item['chunk_id']}]\n{context_excerpt(item['text'])}" for item in contexts
     )
     payload = {
         "model": settings.llm_model,
@@ -55,6 +55,14 @@ def groq_answer(question: str, contexts: Sequence[dict]) -> str:
     )
     response.raise_for_status()
     return response.json()["choices"][0]["message"]["content"].strip()
+
+
+def context_excerpt(text: str) -> str:
+    clean = " ".join(text.split())
+    limit = settings.max_context_chars
+    if len(clean) <= limit:
+        return clean
+    return clean[:limit].rsplit(" ", 1)[0] + "..."
 
 
 def extractive_answer(question: str, contexts: Sequence[dict]) -> str:

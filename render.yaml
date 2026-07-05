@@ -17,5 +17,7 @@ services:
         value: "5"
       - key: MAX_ANSWER_TOKENS
         value: "450"
+      - key: MAX_CONTEXT_CHARS
+        value: "1200"
       - key: CHROMA_DIR
         value: .chroma
