@@ -8,6 +8,8 @@
 - PDF manuals generated and included in `policies/`.
 - CI workflow included in `.github/workflows/ci.yml`.
 - Render deployment config included in `render.yaml`.
+- Render deployment is live: https://code5-knowledge-assistant.onrender.com/
+- Deployment URL recorded in `deployed.md` and `final-submission-links.md`.
 - Tests pass locally: `5 passed`.
 - Evaluation set includes 30 questions.
 - Latest local evaluation:
@@ -19,13 +21,14 @@
 ## Still To Do Outside The Repo
 
 1. Share the GitHub repository with `quantic-grader`.
-2. Deploy on Render or another host if you want the optional public deployment.
-3. Add the deployed URL to `deployed.md`.
-4. Record the 5-10 minute demo video.
+2. Push the latest local commits to GitHub:
+   - `git push origin main`
+3. Record the 5-10 minute demo video.
+4. Add the demo video link to `final-submission-links.md`.
 5. Create the final submission PDF containing:
    - GitHub repo link: https://github.com/Kigen29/code5-knowledge-assistant
    - Demo video link
-   - Deployed app link, if used
+   - Deployed app link: https://code5-knowledge-assistant.onrender.com/
 6. Submit the final PDF through the Quantic dashboard.
 
 ## Demo Flow
