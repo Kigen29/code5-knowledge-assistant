@@ -8,8 +8,10 @@ import requests
 from rag_app.config import settings
 
 
-SYSTEM_PROMPT = """You are a policy helpdesk assistant. Answer only from the supplied policy context.
-If the context does not support the answer, say: I can only answer from Code 5 Developers documents.
+SYSTEM_PROMPT = """You are a policy helpdesk assistant. Answer only from the supplied Code 5 Developers document context.
+If the context contains relevant policy facts, answer directly and do not use the refusal sentence.
+If the context is unrelated or does not support an answer, say exactly: I can only answer from Code 5 Developers documents.
+Never combine the refusal sentence with a partial answer.
 Keep the answer concise. Do not include citation markers in the answer text because citations are shown separately."""
 
 REFUSAL_MESSAGE = "I can only answer from Code 5 Developers documents."
@@ -19,7 +21,10 @@ def generate_answer(question: str, contexts: Sequence[dict]) -> str:
     if not contexts:
         return REFUSAL_MESSAGE
     if settings.groq_api_key:
-        return groq_answer(question, contexts)
+        try:
+            return groq_answer(question, contexts)
+        except requests.RequestException:
+            return extractive_answer(question, contexts)
     return extractive_answer(question, contexts)
 
 
