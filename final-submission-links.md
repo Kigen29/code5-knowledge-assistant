@@ -6,8 +6,8 @@ https://github.com/Kigen29/code5-knowledge-assistant
 
 Recorded demo video:
 
-_Add the demo video link here._
+Pending demo recording.
 
 Deployed app:
 
-_Add the Render or hosting URL here if deployed._
+https://code5-knowledge-assistant.onrender.com/

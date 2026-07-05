@@ -1,4 +1,7 @@
 # Deployed Application
 
-Render URL: _Add the public Render URL here after deployment._
+Render service: code5-knowledge-assistant
 
+Render service ID: srv-d9591vsvikkc73dfmsjg
+
+Render URL: https://code5-knowledge-assistant.onrender.com/
