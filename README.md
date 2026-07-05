@@ -29,9 +29,11 @@ python -m pip install -r requirements.txt
 Optional Groq configuration:
 
 ```bash
-export GROQ_API_KEY="your-key"
-export LLM_MODEL="llama-3.1-8b-instant"
+cp .env.example .env
+# edit .env and set GROQ_API_KEY to a private Groq key
 ```
+
+`.env` is ignored by Git. Do not commit API keys.
 
 ## Build the Library and Index
 
